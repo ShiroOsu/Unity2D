@@ -63,29 +63,25 @@ public class Player : MonoBehaviour
         WallDirectionX = (Controller.Collisions.Left) ? -1 : 1;
 
         CalculateVelocity();
-        //HandleWallSliding(); // We are not using wall sliding in the game
+        HandleWallSliding(); 
 
-
-        // This code is for slopes but interferes with jumping if the code for slopes isn't called / used
         // Commented out and put Move function in FixedUpdate where it 'should' be
-
         // by having the Move function in Update instead of FixedUpdate
         // there was some strange vibrating on the player in the Y-axis 
 
+        Controller.Move(Velocity * Time.deltaTime, DirectionalInput);
 
-        //Controller.Move(Velocity * Time.deltaTime, DirectionalInput);
-
-        //if (Controller.Collisions.Above || Controller.Collisions.Below)
-        //{
-        //    if (Controller.Collisions.SlidingDownMaxSlope)
-        //    {
-        //        Velocity.y += Controller.Collisions.SlopeNormal.y * -Gravity * Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        Velocity.y = 0;
-        //    }
-        //}
+        if (Controller.Collisions.Above || Controller.Collisions.Below)
+        {
+            if (Controller.Collisions.SlidingDownMaxSlope)
+            {
+                Velocity.y += Controller.Collisions.SlopeNormal.y * -Gravity * Time.deltaTime;
+            }
+            else
+            {
+                Velocity.y = 0;
+            }
+        }
     }
 
    private void FixedUpdate()
@@ -97,9 +93,6 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("IsRunning?", false);
         }
-
-       
-
     }
 
     public void SetDirectionalInput(Vector2 _DirectionalInput)
@@ -194,7 +187,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     private void CalculateVelocity()
     {
         float TargetVelocityX = DirectionalInput.x * MoveSpeed;
@@ -210,6 +202,5 @@ public class Player : MonoBehaviour
 
             }
         }
-
     }
 }
